@@ -41,7 +41,7 @@ class ToDo (tk.Frame):
 
     def delete_entry(self):
         radio_selection = self.radiobutton_state.get()
-        radiobutton, radiobutton_label = self.rows[radio_selection, radiobutton_label]
+        radiobutton, radiobutton_label = self.rows[radio_selection]
         radiobutton.destroy()
         radiobutton_label.destroy()
 
