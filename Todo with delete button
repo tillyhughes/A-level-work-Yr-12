@@ -1,0 +1,71 @@
+import tkinter as tk
+
+class ToDo (tk.Frame):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.configure()
+        
+        self.num_rows = 0
+        self.rows = []
+
+        self.radiobutton_state = tk.IntVar()
+        self.intro_label = tk.Label(self, text="To do list")
+        self.intro_label.grid(row=0, column=0, columnspan=2, sticky="ew")
+
+        self.last_row = tk.Frame(self)
+        self.last_row.grid(row=self.num_rows+1, column=0,columnspan=2, sticky="news")
+
+        self.add = tk.Button(self.last_row, text="Add", command=self.add_entry)
+        self.new = tk.Entry(self.last_row)
+
+        self.add.grid(row=0, column=1, sticky="")
+        self.new.grid(row=1, column=0, columnspan=2, sticky="ew")
+
+        self.columnconfigure(0, weight=0)
+        self.columnconfigure(1, weight=1)
+        self.columnconfigure(2, weight=0)
+        self.rowconfigure(self.num_rows+2, weight=1)
+        self.last_row.columnconfigure(0,weight=0)
+        self.last_row.columnconfigure(1, weight=0)
+        self.last_row.rowconfigure(0,weight=0)
+
+    def add_entry(self):
+        self.add_another_entry(self.new.get())
+        self.new.delete(0, "end")
+
+    def add_another_entry(self, task_text):
+        radiobutton = tk.Radiobutton(self, variable=self.radiobutton_state, value=self.num_rows)
+        radiobutton_label = tk.Label(self, text=task_text)
+
+        radiobutton.grid(row= self.num_rows+1, column=0, sticky="")
+        radiobutton_label.grid(row=self.num_rows+1, column=1, sticky="")
+        self.rowconfigure(self.num_rows+1, weight=0)
+        self.rows.append([radiobutton, radiobutton_label])
+        self.num_rows += 1
+
+        self.last_row.grid_forget()
+        self.last_row.grid(row=self.num_rows+1, column=0, columnspan=2, sticky="")
+        self.rowconfigure(self.num_rows+1, weight=1)
+
+
+
+if __name__ == "__main__":
+    # Create a root window and label it
+    root = tk.Tk()
+    root.title("TK inter ToDo List")
+
+    # Glue our ToDo GUI to the root window
+    my_frame = ToDo(root)
+
+    # Create a couple of entries to play with
+    my_frame.add_another_entry("1")
+
+    # Glue our frame into the root window
+    my_frame.grid(row=0, column=0, sticky="news")
+
+    # And make it fill the root window
+    root.columnconfigure(0, weight=1)
+    root.rowconfigure(0, weight=1)
+
+    # Pass control over to the event loop
+    root.mainloop()
